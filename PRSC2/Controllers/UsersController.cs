@@ -14,7 +14,7 @@ namespace PRSC2.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly PRSC2Context _context;
+        public readonly PRSC2Context _context;
 
         public UsersController(PRSC2Context context)
         {
@@ -38,7 +38,7 @@ namespace PRSC2.Controllers
             {
                 return NotFound();
             }
-
+            
             return user;
         }
 
@@ -106,5 +106,11 @@ namespace PRSC2.Controllers
         {
             return _context.User.Any(e => e.Id == id);
         }
+
+        public User Login(string username, string password)
+        {
+            var user = _context.User.SingleOrDefault(u => u.Username == username && u.Password == password);
+            return user;
+        }
     }
-}
+};

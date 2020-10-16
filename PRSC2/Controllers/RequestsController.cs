@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +81,8 @@ namespace PRSC2.Controllers
         [HttpPost]
         public async Task<ActionResult<Request>> PostRequest(Request request)
         {
+
+            
             _context.Request.Add(request);
             await _context.SaveChangesAsync();
 
