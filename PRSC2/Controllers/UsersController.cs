@@ -106,10 +106,10 @@ namespace PRSC2.Controllers
         {
             return _context.User.Any(e => e.Id == id);
         }
-
-        public User Login(string username, string password)
+        [HttpGet("{username}/{password}")]
+        public async Task<ActionResult<User>> Login(string username, string password)
         {
-            var user = _context.User.SingleOrDefault(u => u.Username == username && u.Password == password);
+            var user = await _context.User.SingleOrDefaultAsync(u => u.Username == username && u.Password == password);
             return user;
         }
     }

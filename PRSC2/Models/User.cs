@@ -32,22 +32,9 @@ namespace PRSC2.Models
         public bool IsAdmin { get; set; }
 
         public User()
-        {
-            {
-
-                var _context = new PRSC2Context();
-
-                var ReqCtrl = new UsersController(_context);
-                var updTotal = ReqCtrl.RecalculateRequestTotal(1);
-                var req1 = _context.Request.Find(2);
-                ReqCtrl.ReviewRrequest(req1);
-
-                var isWorked = ReqCtrl.SetToRejected(req1);
-
-                var UserCtrl = new Controllers.UsersController(_context);
-                var user = UserCtrl.Login("xx", "yy");
-            }
-
-            }
-        }
+        { }
+    }
 }
+
+
+
