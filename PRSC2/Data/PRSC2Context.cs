@@ -7,10 +7,11 @@ using PRSC2.Models;
 
 namespace PRSC2.Data
 {
-    public class PRSC2Context : DbContext
+    public class PRSC2Context : DbContext 
     {
-        public PRSC2Context (DbContextOptions<PRSC2Context> options)
-            : base(options)
+ 
+        public PRSC2Context (DbContextOptions<PRSC2Context> context)
+            : base(context)
         {
         }
 
