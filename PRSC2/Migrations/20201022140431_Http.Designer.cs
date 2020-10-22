@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PRSC2.Data;
 
 namespace PRSC2.Migrations
 {
     [DbContext(typeof(PRSC2Context))]
-    partial class PRSC2ContextModelSnapshot : ModelSnapshot
+    [Migration("20201022140431_Http")]
+    partial class Http
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

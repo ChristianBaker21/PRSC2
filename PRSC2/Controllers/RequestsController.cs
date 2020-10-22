@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -116,19 +117,31 @@ namespace PRSC2.Controllers
         {
             return await _context.Request.ToListAsync();
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Request>>> ApproveRequest()
+        [HttpPut("ApproveRequest")]
+        public async Task<IActionResult> ApproveRequest(Request request)
         {
-            return await _context.Request.ToListAsync();
+            request.Status = "Approved";
+            return await PutRequest(request.Id, request);
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Request>>> RejectRequest()
+        [HttpPut("RejectRequest")]
+        public async Task<IActionResult> RejectRequest(Request request)
         {
-            return await _context.Request.ToListAsync();
+            request.Status = "Rejected";
+            return await PutRequest(request.Id, request);
+        }
+        [HttpPut("ReviewRequest")]
+        public async Task<IActionResult> ReviewRequest(Request request)
+        {
+            if (request.Total > 50)
+                request.Status = "Review";
+            else
+                request.Status = "Approved";
+            return await PutRequest(request.Id, request);
+        
         }
         public string Status { get; set; }
-
-        public bool ReviewRrequest(Request request)
+        [HttpPut("CheckStatus")]
+        public bool ReviewsRequest(Request request)
         {
             if (request.Total <= 50)
             {

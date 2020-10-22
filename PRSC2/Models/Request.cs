@@ -19,6 +19,11 @@ namespace PRSC2.Models
         public decimal Total { get; set; }
         public  int UserId { get; set; }
         public virtual User User { get; set; }
+        public IEnumerable<RequestLine> RequestLines { get; set; }
+        public Request()
+        {
+
+        }
 
 
     }
