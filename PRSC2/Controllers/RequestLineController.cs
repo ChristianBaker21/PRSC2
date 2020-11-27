@@ -22,37 +22,39 @@ namespace PRSC2.Models
 
         // GET: api/RequestLine
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Request>>> GetRequest()
+        public async Task<ActionResult<IEnumerable<RequestLine>>> GetRequestLine()
         {
-            return await _context.Request.ToListAsync();
+            
+            return await _context.RequestLine.ToListAsync();
+            
         }
 
         // GET: api/RequestLine/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Request>> GetRequest(int id)
+        public async Task<ActionResult<RequestLine>> GetRequestLine(int id)
         {
-            var request = await _context.Request.FindAsync(id);
+            var requestline = await _context.RequestLine.FindAsync(id);
 
-            if (request == null)
+            if (requestline == null)
             {
                 return NotFound();
             }
-
-            return request;
+            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
+            return requestline;
         }
 
         // PUT: api/RequestLine/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRequest(int id, Request request)
+        public async Task<IActionResult> PutRequestLine(int id, RequestLine requestline)
         {
-            if (id != request.Id)
+            if (id != requestline.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(request).State = EntityState.Modified;
+            _context.Entry(requestline).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +62,7 @@ namespace PRSC2.Models
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RequestExists(id))
+                if (!RequestLineExists(id))
                 {
                     return NotFound();
                 }
@@ -77,34 +79,41 @@ namespace PRSC2.Models
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Request>> PostRequest(Request request)
+        public async Task<ActionResult<RequestLine>> PostRequestline(RequestLine requestline)
         {
-            _context.Request.Add(request);
+            _context.RequestLine.Add(requestline);
             await _context.SaveChangesAsync();
+            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
 
-            return CreatedAtAction("GetRequest", new { id = request.Id }, request);
+            return CreatedAtAction("GetRequestLine", new { id = requestline.Id }, requestline);
+        }
+
+        private Task RecalculateTotal(int requestId, Request request)
+        {
+            throw new NotImplementedException();
         }
 
         // DELETE: api/RequestLine/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Request>> DeleteRequest(int id)
+        public async Task<ActionResult<RequestLine>> DeleteRequestline(int id)
         {
-            var request = await _context.Request.FindAsync(id);
-            if (request == null)
+            var requestline = await _context.RequestLine.FindAsync(id);
+            if (requestline == null)
             {
                 return NotFound();
             }
 
-            _context.Request.Remove(request);
+            _context.RequestLine.Remove(requestline);
             await _context.SaveChangesAsync();
+            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
 
-            return request;
+            return requestline;
         }
 
 
-        private bool RequestExists(int id)
+        private bool RequestLineExists(int id)
         {
-            return _context.Request.Any(e => e.Id == id);
+            return _context.RequestLine.Any(e => e.Id == id);
         }
     }
 }

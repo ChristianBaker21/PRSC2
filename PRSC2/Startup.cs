@@ -31,6 +31,8 @@ namespace PRSC2
 
             services.AddDbContext<PRSC2Context>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("PRSC3context")));
+
+            services.AddCors();
         }
         
 
@@ -41,7 +43,7 @@ namespace PRSC2
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseRouting();
 
             app.UseAuthorization();

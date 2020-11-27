@@ -22,5 +22,6 @@ namespace PRSC2.Data
         public DbSet<PRSC2.Models.Product> Product { get; set; }
 
         public DbSet<PRSC2.Models.Request> Request { get; set; }
+        public DbSet<PRSC2.Models.RequestLine> RequestLine { get; set; }
     }
 }

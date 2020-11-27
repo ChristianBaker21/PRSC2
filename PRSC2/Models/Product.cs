@@ -16,6 +16,7 @@ namespace PRSC2.Models
         public string Unit { get; set; }
         public string PhotoPath { get; set; }
         public int VendorId { get; set; }
+
         public virtual Vendor Vendor { get; set; }
 
     }

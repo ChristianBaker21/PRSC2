@@ -28,14 +28,32 @@ namespace PRSC2.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Request>>> GetRequest()
         {
-            return await _context.Request.ToListAsync();
+            return await _context.Request
+                                 .Include(x => x.User)
+                                 .ToListAsync();
         }
+
+        [HttpGet("review/{userId}")]
+        public async Task<ActionResult<IEnumerable<Request>>> GetRequestinReview(int userId)
+        {
+            return await _context.Request
+                .Where (r => r.Status == "REVIEW" && r.UserId != userId)
+                                 .Include(x => x.User)
+                                 .ToListAsync();
+
+        }
+
+
 
         // GET: api/Requests/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Request>> GetRequest(int id)
         {
-            var request = await _context.Request.FindAsync(id);
+            var request = await _context.Request
+                                        .Include(x => x.User)
+                                        .Include(x => x.RequestLines)
+                                        .ThenInclude(x => x.Product)
+                                        .SingleOrDefaultAsync(r => r.Id == id);
 
             if (request == null)
             {
