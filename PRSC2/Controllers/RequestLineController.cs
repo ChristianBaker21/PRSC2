@@ -24,9 +24,9 @@ namespace PRSC2.Models
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestLine>>> GetRequestLine()
         {
-            
+
             return await _context.RequestLine.ToListAsync();
-            
+
         }
 
         // GET: api/RequestLine/5
@@ -39,7 +39,7 @@ namespace PRSC2.Models
             {
                 return NotFound();
             }
-            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
+            await RecalculateTotal(requestline.RequestId);
             return requestline;
         }
 
@@ -83,15 +83,29 @@ namespace PRSC2.Models
         {
             _context.RequestLine.Add(requestline);
             await _context.SaveChangesAsync();
-            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
+            await RecalculateTotal( requestline.RequestId);
 
             return CreatedAtAction("GetRequestLine", new { id = requestline.Id }, requestline);
         }
 
-        private Task RecalculateTotal(int requestId, Request request)
+        private async Task RecalculateTotal(int requestId)
+
+
+
         {
-            throw new NotImplementedException();
-        }
+            var req = await _context.Request.FindAsync(requestId);
+            var reqtotal = (from prod in _context.Product.ToList()
+                            join reqline in _context.RequestLine.ToList()
+                            on prod.Id equals reqline.ProductId
+                            where requestId == reqline.RequestId
+                            select new
+                            {
+                                total = reqline.Quantity * prod.Price
+                            }).Sum(tot => tot.total);
+                                  req.Total = reqtotal;
+            await _context.SaveChangesAsync();
+            
+            }
 
         // DELETE: api/RequestLine/5
         [HttpDelete("{id}")]
@@ -105,7 +119,7 @@ namespace PRSC2.Models
 
             _context.RequestLine.Remove(requestline);
             await _context.SaveChangesAsync();
-            await RecalculateTotal(requestline.RequestId, _context.Request.Find(requestline.RequestId));
+            await RecalculateTotal(requestline.RequestId);
 
             return requestline;
         }
